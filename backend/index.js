@@ -2,7 +2,9 @@ const express = require('express');
 const dotenv = require("dotenv");
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const ApiError = require('./utils/apiError')
 const app = express();
+const categoryRoute = require('./routes/categoryRoute')
 dotenv.config({path:'config.env'});
 const PORT = process.env.PORT || 8000;
 
@@ -10,10 +12,14 @@ if(process.env.NODE_ENV === "development"){
     app.use(morgan('dev'));
     console.log('development')
 }
-app.use('/',(req,res)=>{
-    res.send('<h1>hello express</h1>')
-})
+
 app.use(express.json())
+
+//Route
+app.use('/api/v1/category',categoryRoute)
+
+
+
 mongoose.connect(process.env.DB_URI).then(()=>{
     console.log('db connect')
     app.listen(PORT,()=>{
