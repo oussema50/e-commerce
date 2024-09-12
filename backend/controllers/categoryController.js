@@ -1,6 +1,7 @@
 const CategoryModel = require('../models/categoryModel')
 const slugify = require('slugify');
 const asyncHandler = require('express-async-handler');
+const ApiError = require('../utils/apiError')
 
 // @desc     Create A Category
 // @route    POST /category
@@ -33,11 +34,11 @@ exports.getAllCategory = asyncHandler(async (req, res) => {
 // @route    GET /api/v1/category/:id
 // @access   Public
 
-exports.getCategoryById = asyncHandler(async (req, res) => {
+exports.getCategoryById = asyncHandler(async (req, res,next) => {
     const { id } = req.params;
     const category = await CategoryModel.findById(id);
     if(!category){
-        res.status(404).json({msg:`No category for this id ${id}`})
+        return next(new ApiError(`No category for this id ${id}`,404))
     }
     res.status(200).json({ data: category });
 });
@@ -46,11 +47,12 @@ exports.getCategoryById = asyncHandler(async (req, res) => {
 // @route    Delete /api/v1/category/:id
 // @access   Private
 
-exports.deleteCategory = asyncHandler(async (req, res) => {
+exports.deleteCategory = asyncHandler(async (req, res,next) => {
     const { id } = req.params;
     const deletedCategory = await CategoryModel.findByIdAndDelete(id);
     if (!deletedCategory) {
-        return res.status(404).json({ msg: 'Category not found!' });
+        return next(new ApiError(`No category for this id ${id}`,404))
+
     }
     res.status(200).json({ msg: 'Category deleted' });
 });
@@ -59,12 +61,13 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
 // @route    PUT /api/v1/category/:id
 // @access   Private
 
-exports.updateCategory = asyncHandler(async (req, res) => {
+exports.updateCategory = asyncHandler(async (req, res,next) => {
     const { id } = req.params;
     const { name } = req.body;
     const updatedCategory = await CategoryModel.findByIdAndUpdate(id, { name, slug: slugify(name) });
     if (!updatedCategory) {
-        return res.status(404).json({ msg: 'Category not found!' });
+        return next(new ApiError(`No category for this id ${id}`,404))
+
     }
     res.status(200).json({ msg: 'Category is updated!' });
 });
