@@ -31,7 +31,10 @@ mongoose.connect(process.env.DB_URI).then(()=>{
     app.listen(PORT,()=>{
         console.log(`server listening on ${PORT}`);
     })
-}).catch((err)=>{
-    console.log(err)
-    process.exit(1)
 })
+//Handle Rejection Outside Express 
+//Event ==> listener ==> 
+    process.on('unhandledRejection',(err)=>{
+        console.error(`unhandleRejection Error: ${err.name} | ${err.message}`);
+        process.exit(1);
+    })
