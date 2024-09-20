@@ -1,3 +1,4 @@
+
 const express = require('express')
 const router = express.Router();
 const {
@@ -16,3 +17,4 @@ router.route('/:id')
     .put(updateCategory);
 
 module.exports = router;
+
