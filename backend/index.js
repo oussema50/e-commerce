@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const ApiError = require('./utils/apiError');
 const app = express();
 const categoryRoute = require('./routes/categoryRoute');
+const subCategoryRoute = require('./routes/subCategoryRoute');
 const globalError = require('./middlewares/errorMiddleware');
 dotenv.config({path:'config.env'});
 const PORT = process.env.PORT || 8000;
@@ -17,6 +18,7 @@ app.use(express.json());
 
 //Route
 app.use('/api/v1/category',categoryRoute);
+app.use('/api/v1/subcategory',subCategoryRoute);
 
 app.use('*',(req,res,next)=>{
     next(new ApiError(`can't find this URL: ${req.originalUrl}`,400));

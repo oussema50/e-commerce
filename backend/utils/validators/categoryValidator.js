@@ -6,7 +6,7 @@ exports.postCategoryValidator =
 [ 
     check('name').notEmpty().withMessage('cateogry Name is required ')
     .isLength({min:3}).withMessage('Too short category name')
-    .isLength({max:3}).withMessage('Too long category name'),
+    .isLength({max:32}).withMessage('Too long category name'),
     validatorMiddleware
 ]
 
